@@ -1,16 +1,15 @@
-import io.github.bonigarcia.wdm.WebDriverManager;
-import org.junit.After;
+package code_to_refactor;
+
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.support.ui.Wait;
 
-import javax.management.StringValueExp;
-import java.util.Scanner;
 import java.util.Random;
+import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
 public class postadd {
@@ -60,11 +59,11 @@ public class postadd {
             }
         }
         System.out.println("Dane wprowadone poprawnie");
-        System.out.println("Uruchamiam Selenium WebDriver");
+        System.out.println("Uruchamiam Selenium WebDriverController");
 
         //Uruchamia chromium i przekierowuje na strone fb
         WebDriver driver;
-        WebDriverManager.chromedriver().setup();
+//        WebDriverManager.chromedriver().setup();
 
         ChromeOptions ops = new ChromeOptions();//wyłąncza powiadomienia
         ops.addArguments("--disable-notifications");

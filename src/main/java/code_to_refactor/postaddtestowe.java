@@ -1,4 +1,7 @@
-import io.github.bonigarcia.wdm.WebDriverManager;
+package code_to_refactor;
+
+//import io.github.bonigarcia.wdm.WebDriverManager;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
@@ -7,27 +10,61 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
 import java.util.Random;
+import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
-public class postaddbackup {
+public class postaddtestowe {
 
     public static void main(String[] args) throws InterruptedException {
 
-        //Scanner in = new Scanner(System.in);
+        Scanner in = new Scanner(System.in);
+        Random r = new Random();
+
+        System.out.println("Witaj w programie Spot Bot,\nPodaj zmienne dla posta ");
         //System.out.println("Podaj hasło do konta: ");
+
         //zmienne dla scryptu
+        //login i hasło (dodać potem scanner)
         String login = "";
         String pass = "";
-        String post = "";
-        Random r = new Random();
-        int dd = 1;
-        int mm;
+
+        //treść posta w zmiennej typu string post
+        System.out.println("Podaj treść Posta: ");
+        String post = in.nextLine();
+
+        //ilość postów dla pentli for ilości w jakiej bedzie dodawany post
+        System.out.println("Podaj ilość postów: ");
+        int iloscPostow = in.nextInt();
+
+        //dzień od którego ma sie zaczynać dodawanie posta
+        System.out.println("Podaj dzień od którego ma się zaczać dodawanie postów: ");
+        int dd = in.nextInt();
+
+        //miesiąc od którego ma sie zaczynać dodawanie posta
+        System.out.println("Podaj miesiąc od którego ma się zaczynać dodawanie posta: ");
+        int mm = in.nextInt();
         int rrrr;
 
+        //zmienne dla zdjęć
+        //ilość zdjęć jaka ma być w poście
+        System.out.println("Podaj ilosc zdjęć: ");
+        int iloscZdjec = in.nextInt();
+
+        String tablicaZdjec[] = new String[iloscZdjec];
+        if (iloscZdjec > 0) {
+            System.out.println("Podaj nazwy zdjęć z rozszerzeniem (jpg, png): ");
+            tablicaZdjec[0] = in.nextLine();
+
+            for (int i = 0; i < tablicaZdjec.length; i++) {
+                tablicaZdjec[i] = in.nextLine();
+            }
+        }
+        System.out.println("Dane wprowadone poprawnie");
+        System.out.println("Uruchamiam Selenium WebDriverController");
 
         //Uruchamia chromium i przekierowuje na strone fb
         WebDriver driver;
-        WebDriverManager.chromedriver().setup();
+//        WebDriverManager.chromedriver().setup();
 
         ChromeOptions ops = new ChromeOptions();//wyłąncza powiadomienia
         ops.addArguments("--disable-notifications");
@@ -35,7 +72,7 @@ public class postaddbackup {
         driver = new ChromeDriver(ops);
         driver.get("https://www.facebook.com/");
         driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
-        driver.findElement(By.xpath("//button[@data-cookiebanner='accept_button']")).click();
+        driver.findElement(By.xpath("//button[@data-cookiebanner='accept_button']")).click(); //akceptacja ciasteczek
 
         //Automatyczne logowanie
         driver.findElement(By.id("email")).sendKeys(login);
@@ -46,10 +83,10 @@ public class postaddbackup {
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         driver.findElement(By.className("p361ku9c")).click();
 
-        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-        driver.findElement(By.linkText("Spotted: Mielec")).click();
+        driver.navigate().to("https://www.facebook.com/Spottedmielecofficial");
 
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+        Thread.sleep(5000);
         driver.findElement(By.linkText("Creator Studio")).click();
 
         //Sprawdza czy pojawiło się okienko do nawigacji
@@ -60,8 +97,8 @@ public class postaddbackup {
 
         }
 
-        //pentla for dla kilku postów
-        for (int i = 0 ; i < 9; i++) {      //dać tu ilość postów
+        //pentla for do ilośc postów
+        for (int i = 0 ; i < iloscPostow; i++) {      //dać tu ilość postów
             int godz = r.nextInt(17 - 15 + 1) + 15; //przedział czasowy od 15 do 17
             int min = r.nextInt(59 - 10 + 1) + 10; //przdział czasowy od 10 do 59
 
@@ -71,15 +108,18 @@ public class postaddbackup {
 
             //tworzenie posta
             driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
+            Thread.sleep(7000);
             driver.findElement(By.xpath("//br[@data-text='true']")).sendKeys(post);//dodać zmienne do tej linijki
 
             //dodawanie zdjęcia do posta
-            try {
+            if (iloscZdjec > 0) {
                 WebElement dodajZdjecie = driver.findElement(By.xpath("//td[@class='fbReactComposerAttachmentSelector_PHOTO pas _1fng _51m-']//div//div//span//a//div[2]//input"));
-                dodajZdjecie.sendKeys("C:\\Users\\Kornel\\Pictures\\test.jpg");
-                Thread.sleep(5000);
-            } catch (Exception e) {
+                for (int j = 0; j < tablicaZdjec.length; j++) {
+                    dodajZdjecie.sendKeys("C:\\Users\\Kornel\\Pictures\\" + tablicaZdjec[j]);
+                }
             }
+            Thread.sleep(5000);
+
 
             driver.manage().timeouts().implicitlyWait(3, TimeUnit.SECONDS);
             driver.findElement(By.xpath("//button[@class='_271k _271l _271m _1qjd _7tvm _7tv2 _7tv4 _p']")).click();
@@ -95,7 +135,7 @@ public class postaddbackup {
                 driver.findElement(By.xpath("//div[@class='_5qcv _3-8x _t0j']//div//span//label//input")).click();
                 driver.findElement(By.xpath("//div[@class='_5qcv _3-8x _t0j']//div//span//label//input")).sendKeys(Keys.CONTROL + "a");
                 driver.findElement(By.xpath("//div[@class='_5qcv _3-8x _t0j']//div//span//label//input")).sendKeys(Keys.DELETE);
-                driver.findElement(By.xpath("//div[@class='_5qcv _3-8x _t0j']//div//span//label//input")).sendKeys(dd + ".05.2021");
+                driver.findElement(By.xpath("//div[@class='_5qcv _3-8x _t0j']//div//span//label//input")).sendKeys(dd + "." + mm + ".2021");
                 dd++;
 
 
@@ -120,15 +160,10 @@ public class postaddbackup {
                 Thread.sleep(2000);
                 driver.findElement(By.xpath("//button[@class='_1mf7  _8bma _4jy0 _4jy3 _4jy1 _51sy selected _42ft']")).click();
             } catch (Exception e) { }
-            Thread.sleep(2000);
-
-            //tutaj dać ifelse pod wyłączanie strony
 
             //odświerza strone
             driver.navigate().to("https://www.facebook.com/Spottedmielecofficial");
-            try {
-                driver.switchTo().alert().accept();
-            } catch (Exception e) {}
+            driver.switchTo().alert().accept();
             Thread.sleep(2000);
             driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
             driver.findElement(By.linkText("Creator Studio")).click();

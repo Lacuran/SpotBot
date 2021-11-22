@@ -1,3 +1,5 @@
+package code_to_refactor;
+
 import java.util.Scanner;
 
 public class tabeladlazdjec {

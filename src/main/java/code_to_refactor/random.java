@@ -1,3 +1,5 @@
+package code_to_refactor;
+
 import java.util.Random;
 
 public class random {
